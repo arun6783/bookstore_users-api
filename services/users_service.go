@@ -2,9 +2,8 @@ package services
 
 import (
 	"github.com/arun6783/bookstore_users-api/domain/users"
+	"github.com/arun6783/bookstore_users-api/utils/date_utils"
 	"github.com/arun6783/bookstore_users-api/utils/errors"
-
-	"github.com/arun6783/bookstore_users-api/utils/dateutils"
 )
 
 func CreateUser(user users.User) (*users.User, *errors.RestErr) {
@@ -13,7 +12,7 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 		return nil, usrErr
 	}
 
-	user.DateCreted = dateutils.GetNowString()
+	user.DateCreted = date_utils.GetNowDBFormat()
 
 	if err := user.Save(); err != nil {
 		return nil, err
