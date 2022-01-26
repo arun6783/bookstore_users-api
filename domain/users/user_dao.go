@@ -13,16 +13,14 @@ const (
 
 func (user *User) Save() *errors.RestErr {
 
-	//var db = users_db.GetDB()
+	stmt, err := users_db.Client.Prepare(queryInsertUser)
+	if err != nil {
+		return errors.NewInternalServerError(err.Error())
+	}
 
-	// stmt, err := db.Prepare(queryInsertUser)
-	// if err != nil {
-	// 	return errors.NewInternalServerError(err.Error())
-	// }
+	defer stmt.Close()
 
-	// defer stmt.Close()
-
-	insertResult, err := users_db.Client.Exec(queryInsertUser, user.FirstName, user.LastName, user.Email, user.DateCreted)
+	insertResult, err := stmt.Exec(user.FirstName, user.LastName, user.Email, user.DateCreted)
 	if err != nil {
 		return errors.NewInternalServerError(err.Error())
 	}
