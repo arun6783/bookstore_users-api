@@ -13,14 +13,16 @@ const (
 
 func (user *User) Save() *errors.RestErr {
 
-	stmt, err := users_db.Client.Prepare(queryInsertUser)
-	if err != nil {
-		return errors.NewInternalServerError(err.Error())
-	}
+	//var db = users_db.GetDB()
 
-	defer stmt.Close()
+	// stmt, err := db.Prepare(queryInsertUser)
+	// if err != nil {
+	// 	return errors.NewInternalServerError(err.Error())
+	// }
 
-	insertResult, err := stmt.Exec(user.FirstName, user.LastName, user.Email, user.DateCreted)
+	// defer stmt.Close()
+
+	insertResult, err := users_db.Client.Exec(queryInsertUser, user.FirstName, user.LastName, user.Email, user.DateCreted)
 	if err != nil {
 		return errors.NewInternalServerError(err.Error())
 	}
@@ -37,7 +39,7 @@ func (user *User) Save() *errors.RestErr {
 
 func (user *User) Get() *errors.RestErr {
 
-	println(users_db.Client.Stats().MaxOpenConnections)
+	println(fmt.Sprintf("number of connections is %v", users_db.Client.Stats()))
 
 	return nil
 }

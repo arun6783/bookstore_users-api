@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/arun6783/bookstore_users-api/domain/users"
-	"github.com/arun6783/bookstore_users-api/utils/date_utils"
+	date_utils "github.com/arun6783/bookstore_users-api/utils"
 	"github.com/arun6783/bookstore_users-api/utils/errors"
 )
 

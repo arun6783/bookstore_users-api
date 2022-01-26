@@ -10,35 +10,34 @@ import (
 )
 
 const (
-	mysql_users_username = "mysql_users_username"
-	mysql_users_password = "mysql_users_password"
-	mysql_users_host     = "mysql_users_host"
-	mysql_users_schema   = "mysql_users_schema"
+	mysqlUsersUsername = "mysql_users_username"
+	mysqlUsersPassword = "mysql_users_password"
+	mysqlUsersHost     = "mysql_users_host"
+	mysqlUsersSchema   = "mysql_users_schema"
 )
 
 var (
-	Client sql.DB
+	Client *sql.DB
 
-	userName = os.Getenv(mysql_users_username)
-	password = os.Getenv(mysql_users_password)
-	host     = os.Getenv(mysql_users_host)
-	scheme   = os.Getenv(mysql_users_schema)
+	username = os.Getenv(mysqlUsersUsername)
+	password = os.Getenv(mysqlUsersPassword)
+	host     = os.Getenv(mysqlUsersHost)
+	schema   = os.Getenv(mysqlUsersSchema)
 )
 
 func init() {
 
-	var dataSourceName = fmt.Sprintf("%s:%s@tcp(%s)/%s", userName, password, host, scheme)
-
-	Client, err := sql.Open("mysql", dataSourceName)
-
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8",
+		username, password, host, schema,
+	)
+	var err error
+	Client, err = sql.Open("mysql", dataSourceName)
 	if err != nil {
 		panic(err)
 	}
-
 	if err = Client.Ping(); err != nil {
 		panic(err)
 	}
 
-	log.Println("database configured successfully")
-
+	log.Println("database successfully configured ")
 }
