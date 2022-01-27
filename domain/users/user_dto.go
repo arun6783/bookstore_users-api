@@ -11,7 +11,7 @@ const (
 )
 
 type User struct {
-	Id         int64  `json:"user_id"`
+	Id         int64  `json:"id"`
 	FirstName  string `json:"first_name"`
 	LastName   string `json:"last_name"`
 	Email      string `json:"email"`
@@ -19,6 +19,8 @@ type User struct {
 	Status     string `json:"status"`
 	Password   string `json:password"`
 }
+
+type Users []User
 
 func (user *User) Validate() *errors.RestErr {
 
