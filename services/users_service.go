@@ -13,6 +13,7 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	}
 
 	user.DateCreted = date_utils.GetNowDBFormat()
+	user.Status = users.StatusActive
 
 	if err := user.Save(); err != nil {
 		return nil, err
@@ -69,4 +70,9 @@ func Delete(userId int64) *errors.RestErr {
 
 	current := &users.User{Id: userId}
 	return current.Delete()
+}
+
+func Search(status string) ([]users.User, *errors.RestErr) {
+	dao := &users.User{}
+	return dao.Search(status)
 }

@@ -14,6 +14,6 @@ func mapURls() {
 	router.DELETE("/users/:user_id", users.Delete)
 	router.GET("/users/:user_id", users.Get)
 
-	router.GET("/users/search", users.Search)
+	router.GET("internal/users/search", users.Search)
 
 }
