@@ -7,7 +7,22 @@ import (
 	"github.com/arun6783/bookstore_users-api/utils/errors"
 )
 
-func CreateUser(user users.User) (*users.User, *errors.RestErr) {
+var (
+	UsersService usersServiceInterface = &usersService{}
+)
+
+type usersService struct {
+}
+
+type usersServiceInterface interface {
+	CreateUser(users.User) (*users.User, *errors.RestErr)
+	GetUser(int64) (*users.User, *errors.RestErr)
+	UpdateUser(bool, users.User) (*users.User, *errors.RestErr)
+	DeleteUser(int64) *errors.RestErr
+	SearchUser(string) (users.Users, *errors.RestErr)
+}
+
+func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr) {
 
 	if usrErr := user.Validate(); usrErr != nil {
 		return nil, usrErr
@@ -24,7 +39,7 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	return &user, nil
 }
 
-func GetUser(userId int64) (*users.User, *errors.RestErr) {
+func (s *usersService) GetUser(userId int64) (*users.User, *errors.RestErr) {
 	if userId <= 0 {
 		return nil, errors.NewBadResuestError("User id should be greater than 0")
 	}
@@ -38,9 +53,9 @@ func GetUser(userId int64) (*users.User, *errors.RestErr) {
 	return result, nil
 }
 
-func UpdateUser(isPartialUpdate bool, user users.User) (*users.User, *errors.RestErr) {
+func (s *usersService) UpdateUser(isPartialUpdate bool, user users.User) (*users.User, *errors.RestErr) {
 
-	current, err := GetUser(user.Id)
+	current, err := UsersService.GetUser(user.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +80,7 @@ func UpdateUser(isPartialUpdate bool, user users.User) (*users.User, *errors.Res
 	return current, nil
 }
 
-func Delete(userId int64) *errors.RestErr {
+func (s *usersService) DeleteUser(userId int64) *errors.RestErr {
 	if userId <= 0 {
 		return errors.NewBadResuestError("User id should be greater than 0")
 	}
@@ -74,7 +89,7 @@ func Delete(userId int64) *errors.RestErr {
 	return current.Delete()
 }
 
-func Search(status string) (users.Users, *errors.RestErr) {
+func (s *usersService) SearchUser(status string) (users.Users, *errors.RestErr) {
 	dao := &users.User{}
 	return dao.Search(status)
 }
